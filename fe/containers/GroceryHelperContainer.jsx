@@ -15,7 +15,7 @@ class GroceryHelperContainer extends React.Component {
 
     return (
       <div className='gorcery-helper'>
-        <a href="#onboarding">Onboarding</a>
+        <a href="/process">Onboarding</a>
         <a href="#shopping-list">Shopping List</a>
       </div>
     );

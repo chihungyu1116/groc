@@ -27,6 +27,7 @@ class ShoppingListContainer extends React.Component {
             })
           }
         </ul>
+        <button>Show List</button>
       </div>
     );
   }
