@@ -17,8 +17,10 @@ class ShoppingListContainer extends React.Component {
     return (
       <div className='gorcery-helper'>
         <div>{ message }</div>
-        <input onKeyDown={ event => { this.handleInput(event) } } />
-        <ul>
+        <div>
+          Item Name: <input onKeyDown={ event => { this.handleInput(event) } } />
+        </div>
+        <ul className='shopping-list'>
           {
             list.map((itemName, index) => {
               return <li key={ index }>{ itemName }</li>

@@ -64,3 +64,11 @@ html, body {
 .popup.open {
   opacity: 1;
 }
+
+.shopping-list > li {
+  padding: 10px;
+  border: 1px solid #eee;
+  display: inline-block;
+  margin-right: 5px;
+}
+
