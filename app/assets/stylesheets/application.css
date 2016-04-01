@@ -45,11 +45,22 @@ html, body {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 800px;
-  height: 500px;
-  margin-left: -400px;
-  margin-top: -250px;
+  width: 1200px;
+  height: 600px;
+  margin-left: -600px;
+  margin-top: -300px;
   background: #fff;
   border: 1px solid #eee;
   transition: background-color 0.25s ease-out
+}
+
+
+
+.popup {
+  opacity: 0;
+  transition: opacity 0.2s ease-in;  
+}
+
+.popup.open {
+  opacity: 1;
 }

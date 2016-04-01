@@ -7,13 +7,14 @@ import {
 
 class AppContainer extends React.Component {
   render() {
-    const { routes, params } = this.props;
+    const { groceryHelperOpen } = this.props;
+    const groceryHelperClass = 'popup ' + (groceryHelperOpen ? 'open' : 'close');
 
     return (
       <div id="app">
         <img src="/assets/wmtg_bg.png" className="bg" alt="" />
         <div id="gorcery-helper" onClick={ event => this.closeGroceryHelper(event) }>
-          <div onClick={ event => this.preventCloseGroceryHelper(event) }>
+          <div onClick={ event => this.preventCloseGroceryHelper(event) } className={ groceryHelperClass }>
             {this.props.children}
           </div>
         </div>
@@ -47,7 +48,11 @@ AppContainer.propTypes = {
 }
 
 function mapStateToProps(state) {
-  return {};
+  const { groceryHelperOpen } = state.AppReducer;
+
+  return {
+    groceryHelperOpen
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
