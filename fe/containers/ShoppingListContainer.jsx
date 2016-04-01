@@ -26,7 +26,7 @@ class ShoppingListContainer extends React.Component {
           <ul className='shopping-list'>
             {
               list.map((itemName, index) => {
-                return <li key={ index }>{ itemName }</li>
+                return <li key={ index }>{ itemName } <i className="fa fa-times"></i> </li>
               })
             }
           </ul>
