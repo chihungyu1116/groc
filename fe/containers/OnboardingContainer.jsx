@@ -15,9 +15,15 @@ class OnboardingContainer extends React.Component {
           <div className="question">What best describe your shopping now?</div>
           <div className="visual">
             <div className="self option">
+              <div className="img">
+                <img src="/assets/self-image.png" className="self-image"/>
+              </div>
               <div className="msg">Shop for self</div>
             </div>
             <div className="family option">
+              <div className="img">
+                <img src="/assets/family-image.png" className="family-image"/>
+              </div>
               <div className="msg">Shop for family</div>
             </div>
           </div>

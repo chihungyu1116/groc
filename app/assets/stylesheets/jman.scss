@@ -6,15 +6,11 @@
   height: 400px;
   margin-left: -400px;
   margin-top: -200px;
-  background: #fff;
+  background: #DEDEDE;
   border: 1px solid #eee;
   transition: background-color 0.25s ease-out
 }
 .onboarding{
-    width: 900px;
-    margin-left: -450px;
-    height: 480px;
-    margin-top: -240px;
     background-color: #F7F7F7;
     border-radius: 5px;
     border: 1px solid #B9B9B9;
@@ -33,6 +29,7 @@
 
 .onboarding .question{
   margin-top: 21px;
+  font-family: 'Francois One',sans-serif;
 }
 
 .onboarding .visual{
@@ -44,16 +41,25 @@
 }
 
 .onboarding .option{
-  width: 300px;
-  height: 300px;
+  width: 270px;
+  height: 270px;
   display: inline-block;
-  /* margin-right: 45px; */
-  background-color: #C4DCEA;
   cursor: pointer;
 }
 
-.onboarding .option:hover{
-  background-color: #b5e9ff;
+.onboarding .img{
+  height: 191px;
+  width: 200px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.onboarding .img:hover{
+  background-color: rgba(220, 195, 148, 0.5);
+}
+.onboarding .img .family-image{
+  position: relative;
+  bottom: 10px;
 }
 .onboarding .self{
   margin-right: 17px;
@@ -81,9 +87,8 @@
 }
 
 .jman .option .img:hover{
-  background-color: #48A1CC;
+  background-color: rgba(0,125,198,0.5);
 }
-
 .jman .msg{
   font-size: 17px;
   margin-top: 13px;
