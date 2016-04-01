@@ -1,0 +1,43 @@
+$primary-color: #007dc6; // walmart blue
+$secondary-color: #ffc120; // walmart yellow
+$text-color: black;
+$border-color: lightgrey;
+$font-size: 15px;
+$border-radius: 4px;
+
+.yj-suggestion-item-container {
+  font-size: $font-size;
+  color: $text-color;
+  width: 150px;
+  height: 200px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  display: inline-block;
+  margin: 5px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.yj-suggestion-item-id {
+}
+
+.yj-suggestion-item-image {
+  width: auto;
+  height: 50%;
+}
+
+.yj-suggestion-item-name {
+  height: 3em;
+  margin: 10px 0;
+}
+
+.yj-suggestion-item-price {
+  color: $primary-color;
+}
+
+.yj-suggestion-item-name, .yj-suggestion-item-id, .yj-suggestion-item-price {
+  width: 100%;
+}
+
+
+
