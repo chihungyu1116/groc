@@ -2,7 +2,9 @@ import React, { Component , PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {
   addToShoppingListAct,
-  itemIsAlreadyInShoppingListAct
+  itemIsAlreadyInShoppingListAct,
+  processShoppingListAct,
+  shoppingListIsEmptyAct
 } from '../actions/ShoppingListAction';
 
 const ENTER_KEY_CODE = 13;
@@ -15,21 +17,33 @@ class ShoppingListContainer extends React.Component {
     } = this.props;
 
     return (
-      <div className='gorcery-helper'>
-        <div>{ message }</div>
-        <div>
-          Item Name: <input onKeyDown={ event => { this.handleInput(event) } } />
+      <div className='gorcery-helper jy'>
+        <div className='shopping-list-view'>
+          <div>{ message }</div>
+          <div>
+            Item Name: <input onKeyDown={ event => { this.handleInput(event) } } />
+          </div>
+          <ul className='shopping-list'>
+            {
+              list.map((itemName, index) => {
+                return <li key={ index }>{ itemName }</li>
+              })
+            }
+          </ul>
+          <button className='btn' onClick={ event => this.processShoppingList() } >Show List</button>
         </div>
-        <ul className='shopping-list'>
-          {
-            list.map((itemName, index) => {
-              return <li key={ index }>{ itemName }</li>
-            })
-          }
-        </ul>
-        <button>Show List</button>
       </div>
     );
+  }
+
+  processShoppingList(event) {
+    const { list } = this.props;
+
+    if(list.length !== 0) {
+      this.props.processShoppingListAct(list);
+    } else {
+      this.props.shoppingListIsEmptyAct();
+    }
   }
 
   handleInput(event) {
@@ -72,6 +86,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     itemIsAlreadyInShoppingListAct: () => {
       dispatch(itemIsAlreadyInShoppingListAct());
+    },
+    processShoppingListAct: (list) => {
+      dispatch(processShoppingListAct(list));
+    },
+    shoppingListIsEmptyAct: () => {
+      dispatch(shoppingListIsEmptyAct());
     }
   }
 }
