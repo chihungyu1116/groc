@@ -15,7 +15,7 @@ class ShoppingListContainer extends React.Component {
     } = this.props;
 
     return (
-      <div id="shopping-list">
+      <div className='gorcery-helper'>
         <div>{ message }</div>
         <input onKeyDown={ event => { this.handleInput(event) } } />
         <ul>

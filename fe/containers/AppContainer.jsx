@@ -8,7 +8,8 @@ class AppContainer extends React.Component {
     return (
       <div id="app">
         <img src="/assets/wmtg_bg.png" id="bg" alt="" />
-        <div id="public-page">{this.props.children}</div>
+        <div id="gorcery-helper">{this.props.children}</div>
+        <a id="icon" href="#grocery-helper"></a>
       </div>
     );
   }
