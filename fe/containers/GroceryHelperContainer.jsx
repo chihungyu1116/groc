@@ -14,9 +14,25 @@ class GroceryHelperContainer extends React.Component {
     const { routes, params } = this.props;
 
     return (
-      <div className='gorcery-helper'>
-        <a href="/process">Onboarding</a>
-        <a href="#shopping-list">Shopping List</a>
+      <div className='gorcery-helper jman'>
+        <div className="option">
+          <div className="question">Already have a shopping list?</div>
+          <a href="#shopping-list">
+            <div className="img">
+              <img src="/assets/shoppinglist.png"/>
+            </div>
+            <div className="msg">Shop With Shopping list</div>
+          </a>
+        </div>
+        <div className="option">
+          <div className="question">No? Let us help you!</div>
+          <a href="#onboarding">
+            <div className="img">
+              <img src="/assets/grocery.png"/>
+            </div>
+            <div className="msg">Shop With Our Guide</div>
+          </a>
+        </div>
       </div>
     );
   }

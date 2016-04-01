@@ -1,0 +1,90 @@
+.onboarding{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 400px;
+  margin-left: -400px;
+  margin-top: -200px;
+  background: #fff;
+  border: 1px solid #eee;
+  transition: background-color 0.25s ease-out
+}
+.onboarding{
+    width: 900px;
+    margin-left: -450px;
+    height: 480px;
+    margin-top: -240px;
+    background-color: #F7F7F7;
+    border-radius: 5px;
+    border: 1px solid #B9B9B9;
+    font-family: 'Open Sans Condensed',sans-serif;
+    text-align: center;
+}
+
+.onboarding .onboarding-questionaire{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 31px;
+    color: #656565;
+    position: absolute;
+}
+
+.onboarding .question{
+  margin-top: 21px;
+}
+
+.onboarding .visual{
+  width: 100%;
+  height: 300px;
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.onboarding .option{
+  width: 300px;
+  height: 300px;
+  display: inline-block;
+  /* margin-right: 45px; */
+  background-color: #C4DCEA;
+  cursor: pointer;
+}
+
+.onboarding .option:hover{
+  background-color: #b5e9ff;
+}
+.onboarding .self{
+  margin-right: 17px;
+}
+.jman .question{
+  font-family: 'Francois One',sans-serif;
+  font-size: 24px;
+  color: #676565;
+  margin-top: 22px;
+}
+.jman a{
+  color: #1fbad6;
+  text-decoration: none;
+}
+
+.jman .option{
+  width: 300px;
+  height: 100%;
+}
+
+.jman .option .img{
+  margin-top: 17px;
+  height: 248px;
+  padding-top: 7px;
+}
+
+.jman .option .img:hover{
+  background-color: #48A1CC;
+}
+
+.jman .msg{
+  font-size: 17px;
+  margin-top: 13px;
+}

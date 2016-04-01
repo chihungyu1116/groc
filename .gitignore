@@ -21,3 +21,6 @@
 .byebug_history
 
 /node_modules
+app/assets/javascripts/hackathon-bundle.js
+.DS_Store
+.idea/

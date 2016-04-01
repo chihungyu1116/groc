@@ -55,9 +55,12 @@ html, body {
   height: 400px;
   margin-left: -400px;
   margin-top: -200px;
-  background: #fff;
+  background: #DEDEDE;
+  text-align: center;
   border: 1px solid #eee;
-  transition: background-color 0.25s ease-out
+  transition: background-color 0.25s ease-out;
+    display: flex;
+    justify-content: center;
 }
 
 .popup {
