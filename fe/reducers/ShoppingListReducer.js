@@ -1,5 +1,6 @@
 import {
   ADD_TO_SHOPPING_LIST_ACT,
+  REMOVE_FROM_SHOPPING_LIST_ACT,
   ITEM_IS_ALREADY_IN_SHOPPING_LIST_ACT,
   SHOPPING_LIST_IS_EMPTY_ACT,
   PROCESS_SHOPPING_LIST_ACT
@@ -33,8 +34,15 @@ export default function ShoppingListReducer(state = defaultState, action) {
     return Object.assign({}, state, {
       message: SHOPPING_LIST_EMPTY
     });
-  } else if(action.type === PROCESS_SHOPPING_LIST_ACT) {
-    
+  } else if(action.type === REMOVE_FROM_SHOPPING_LIST_ACT) {
+
+    console.log('action: ', action)
+    const newList = state.list.slice();
+    newList.splice(action.index, 1);
+
+    return Object.assign({}, state, {
+      list: newList
+    });
   }
 
   return state;

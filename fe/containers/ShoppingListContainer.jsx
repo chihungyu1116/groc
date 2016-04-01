@@ -2,6 +2,7 @@ import React, { Component , PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {
   addToShoppingListAct,
+  removeFromShoppingListAct,
   itemIsAlreadyInShoppingListAct,
   processShoppingListAct,
   shoppingListIsEmptyAct
@@ -21,12 +22,12 @@ class ShoppingListContainer extends React.Component {
         <div className='shopping-list-view'>
           <div>{ message }</div>
           <div>
-            Item Name: <input onKeyDown={ event => { this.handleInput(event) } } />
+            Item Name: <input onKeyDown={ event => { this.addToShoppingList(event) } } />
           </div>
           <ul className='shopping-list'>
             {
               list.map((itemName, index) => {
-                return <li key={ index }>{ itemName } <i className="fa fa-times"></i> </li>
+                return <li key={ index }>{ itemName } <i className="fa fa-times" onClick={ event => { this.removeFromShoppingList(event, index)} }></i> </li>
               })
             }
           </ul>
@@ -46,7 +47,11 @@ class ShoppingListContainer extends React.Component {
     }
   }
 
-  handleInput(event) {
+  removeFromShoppingList(event, index) {
+    this.props.removeFromShoppingListAct(index);
+  }
+
+  addToShoppingList(event) {
     const { list } = this.props;
     const { keyCode, target } = event;
     const itemName = target.value.trim();
@@ -83,6 +88,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToShoppingListAct: (itemName) => {
       dispatch(addToShoppingListAct(itemName));
+    },
+    removeFromShoppingListAct: (index) => {
+      dispatch(removeFromShoppingListAct(index));
     },
     itemIsAlreadyInShoppingListAct: () => {
       dispatch(itemIsAlreadyInShoppingListAct());

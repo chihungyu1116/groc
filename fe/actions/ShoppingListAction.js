@@ -21,6 +21,15 @@ export function addToShoppingListAct(itemName) {
   }
 }
 
+export const REMOVE_FROM_SHOPPING_LIST_ACT = 'REMOVE_FROM_SHOPPING_LIST_ACT';
+
+export function removeFromShoppingListAct(index) {
+  return {
+    type: REMOVE_FROM_SHOPPING_LIST_ACT,
+    index
+  }
+}
+
 export const ITEM_IS_ALREADY_IN_SHOPPING_LIST_ACT = 'ITEM_IS_ALREADY_IN_SHOPPING_LIST_ACT';
 
 export function itemIsAlreadyInShoppingListAct() {
