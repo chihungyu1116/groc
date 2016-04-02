@@ -1,68 +1,125 @@
 import React, { Component , PropTypes } from 'react'
 import { connect } from 'react-redux'
-import {
-  openGroceryHelperAct,
-  closeGroceryHelperAct
-} from '../actions/AppAction';
+import _ from 'lodash'
+
+const LIST_CLASS_PREFIX = 'yj-suggestion-list'
+const ITEM_CLASS_PREFIX = 'yj-suggestion-item'
+
+
 
 class SuggestionListContainer extends React.Component {
+  constructor (props) {
+    super(props)
+    this.updateSuggestionList = this.updateSuggestionList.bind(this)
+    this.browseAlternativeItems = this.browseAlternativeItems.bind(this)
+  }
+
   componentWillMount() {
     this.setInitialState()
   }
 
   setInitialState() {
-    this.setState({
-      items: [
-        {
-          query: 'apple',
-          itemId: 11980008, 
-          imageUrl: 'http://ll-us-i5.wal.co/dfw/dce07b8c-5e74/k2-_9148854a-0e30-40f7-b1fd-03fe34a13f44.v2.jpg-0ff7ef09dd18c1bd9ac774b15e368f0b87020aaa-webp-450x450.webp', 
-          name: 'Pink Lady U.S. Extra Fancy Grade Apples, 3 Lb',
-          price: '3.99'
-        },
-        {
-          query: 'steak',
-          itemId: 43839468, 
-          imageUrl: 'http://ll-us-i5.wal.co/dfw/dce07b8c-6e1e/k2-_44cf321e-60da-47ff-af3a-f703cfd05819.v2.jpg-85029bdaaefb6916238ac9567e8af4355c7129d9-webp-450x450.webp', 
-          name: 'Chuck Boneless Eye Steak',
-        },
-      ]
-
-
-    })
-
-
+    this.setState({dirty: false})
   }
 
-  renderSuggestionItems(items) {
+  componentWillReceiveProps(nextProps) {
+    const { suggestionList } = nextProps
+    this.setState({suggestionList: suggestionList})
+  }
+
+  renderSuggestionItems(items, itemCardType) {
     return items.map((item, index) => {
-      const { query, itemId, imageUrl, name, price } = item
       return (
-        <div key={index} className="yj-suggestion-item-container">
-          <img className="yj-suggestion-item-image"
-            src={imageUrl} />
-          <div className="yj-suggestion-item-name">{name}</div>
-          <div className="yj-suggestion-item-price">{price ? `$${price}` : 'Price not available'}</div>
+        <div key={index}>
+          { this.renderSuggestionItem(item, index, itemCardType) }
+          { this.renderAlternativeItems(item, index, itemCardType) }
         </div>
       )
-
-
     })
+  }
 
+  getItemClasses(className, itemCardType) {
+    return [`${ITEM_CLASS_PREFIX}-${className}`, itemCardType].join(' ')
+  }
 
+  getListClasses(className) {
+    return `${LIST_CLASS_PREFIX}-${className}`
+  }
+
+  renderAlternativeItems(item, index, itemCardType) {
+    const containerClasses = this.getItemClasses('container', itemCardType)
+    return true ? null : (
+      <div className={containerClasses}>
+        abcdefg
+      </div>
+      )
+  }
+
+  renderSuggestionItem(item, index, itemCardType) {
+    const { data, price, query, count } = item
+    itemCardType = itemCardType === 'thumbnail' ? 'thumbnail' : 'tile'
+    const containerClasses = this.getItemClasses('container', itemCardType)
+    const nameClasses = this.getItemClasses('name', itemCardType)
+    const imageClasses = this.getItemClasses('image', itemCardType)
+    const priceClasses = this.getItemClasses('price', itemCardType)
+    return item.not_found ? null : (
+       <div className={containerClasses}>
+         <img className={imageClasses} src={data.images.thumbnail} />
+         <div className={nameClasses}>{data.name}</div>
+         <div className={priceClasses}>{price ? `$${price.list}` : 'Price not available'}</div>
+         { this.renderAmountEdit(index, count, itemCardType) }
+       </div>
+    )
+  }
+
+  renderAmountEdit(index, count, itemCardType) {
+    if ( itemCardType !== 'tile' ) { return null }
+    const editClasses = this.getItemClasses('edit', itemCardType)
+    const editButtonClasses = this.getItemClasses('edit-button', itemCardType)
+    const changeButtonClasses = this.getItemClasses('change-button', itemCardType)
+    const countClasses = this.getItemClasses('edit-count', itemCardType)
+    const addOne = () => { this.updateSuggestionList(index, count+1) }
+    const subtractOne = () => { this.updateSuggestionList(index, Math.max(0, count-1)) }
+    const changeItem = (event) => { this.browseAlternativeItems(index) }
+    return (
+      <div className={editClasses}>
+        <button className={editButtonClasses} onClick={subtractOne}>-</button>
+        <input className={countClasses} type="text" onChange={() => {}} value={count} disabled/>
+        <button className={editButtonClasses} onClick={addOne}>+</button>
+        <button className={changeButtonClasses} onClick={changeItem}>Change</button>
+      </div>
+    )
+  }
+
+  updateSuggestionList(itemIndex, newCount) {
+    const suggestionList = this.getSuggestionList()
+    suggestionList[itemIndex].count = newCount
+    this.setState({
+      suggestionList: suggestionList,
+      dirty: true
+    })
+  }
+
+  browseAlternativeItems(itemIndex) {
+    const suggestionList = this.getSuggestionList()
+    const query = suggestionList[itemIndex].query
+    console.log(['browseAlternativeItems', itemIndex, query])
 
   }
 
+  getSuggestionList() {
+    return this.state.dirty ? this.state.suggestionList : this.props.suggestionList
+  }
 
   render() {
-    const { routes, params } = this.props
-    const { items } = this.state
-
+    const suggestionList = this.getSuggestionList()
+    const listContainerClasses = this.getListClasses('container')
+    const listTitleClasses = this.getListClasses('title')
+    const title = "We've put together a shopping list for you"
     return (
-      <div className='gorcery-helper'>
-        <div>
-          {this.renderSuggestionItems(items)}
-        </div>
+      <div className={listContainerClasses}>
+        <h3 className={listTitleClasses}>{title}</h3>
+        {this.renderSuggestionItems(suggestionList, 'thumbxnail')}
       </div>
     );
   }
@@ -77,7 +134,10 @@ SuggestionListContainer.propTypes = {
 }
 
 function mapStateToProps(state) {
-  return {};
+  const { suggestionList } = state.SuggestionListReducer
+  return {
+    suggestionList
+  };
 }
 
 export default connect(mapStateToProps)(SuggestionListContainer)

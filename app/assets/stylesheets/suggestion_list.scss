@@ -1,42 +1,119 @@
 $primary-color: #007dc6; // walmart blue
 $secondary-color: #ffc120; // walmart yellow
 $text-color: black;
+$background-color: white;
 $border-color: lightgrey;
 $font-size: 15px;
+$line-height: 18px;
 $border-radius: 4px;
 
-.yj-suggestion-item-container {
-  font-size: $font-size;
-  color: $text-color;
-  width: 150px;
-  height: 200px;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-  display: inline-block;
-  margin: 5px;
-  text-align: center;
-  vertical-align: top;
+.yj-suggestion-list-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 400px;
+  margin-left: -400px;
+  margin-top: -200px;
+  padding: 10px;
+  background: $background-color;
+  border: 1px solid #eee;
+  transition: background-color 0.25s ease-out;
+  overflow-y: scroll;
 }
 
-.yj-suggestion-item-id {
+.yj-suggestion-list-title {
+  color: $primary-color;
+  text-align: center;  
+}
+
+.yj-suggestion-item-container {
+  box-sizing: border-box;
+  font-size: $font-size;
+  color: $text-color;
+  border-radius: $border-radius;
+  width: 100%;
+  height: 100px;
+  margin: 5px;
+  padding: 10px;
+  &.thumbnail {
+    border: 1px solid $border-color;
+    text-align: center;
+    width: 150px;
+    height: 180px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  &.tile {
+    border-bottom: 1px solid $border-color;
+    margin: 0;
+  }
 }
 
 .yj-suggestion-item-image {
   width: auto;
   height: 50%;
+  &.tile {
+    height: 100%;
+    margin-right: 15px;
+  }
 }
 
 .yj-suggestion-item-name {
-  height: 3em;
+  height: 36px;
   margin: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &.tile {
+    width: 50%;
+    height: 100%;
+  }
 }
 
 .yj-suggestion-item-price {
   color: $primary-color;
+  font-weight: bold;
+  font-size: 120%;
+  &.tile {
+    width: 60px;
+    height: 80%;
+  }
 }
 
-.yj-suggestion-item-name, .yj-suggestion-item-id, .yj-suggestion-item-price {
-  width: 100%;
+.yj-suggestion-item-edit {
+  //border: 1px solid green;
+  width: 200px;
+  height: 80%;
+}
+
+input.yj-suggestion-item-edit-count {
+  width: 25px;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.yj-suggestion-item-edit-button, .yj-suggestion-item-change-button {
+  width: 30px;
+  height: 30px;
+  background-color: $primary-color;
+  color: white;
+  outline: none;
+}
+
+.yj-suggestion-item-change-button {
+  width: 80px;
+  margin-left: 10px;
+}
+
+.yj-suggestion-item-name, .yj-suggestion-item-id, 
+.yj-suggestion-item-price, .yj-suggestion-item-edit {
+  &.thumbnail {
+    width: 100%;
+  }
+  &.tile {
+    display: inline-block;
+    vertical-align: top;
+  }
 }
 
 
