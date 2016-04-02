@@ -9,11 +9,10 @@ class AppContainer extends React.Component {
   render() {
     const { groceryHelperOpen } = this.props;
     const groceryHelperClass = 'popup ' + (groceryHelperOpen ? 'open' : 'close');
-
     return (
       <div id="app">
-        <img src="/assets/wmtg_bg.png" className="bg" alt="" />
-        <div id="gorcery-helper" onClick={ event => this.closeGroceryHelper(event) }>
+        <img src="/assets/wmtg_bg1.png" className="bg" alt="" />
+        <div id="gorcery-helper" onClick={ event => this.closeGroceryHelper(event) } className={ groceryHelperClass }>
           <div onClick={ event => this.preventCloseGroceryHelper(event) } className={ groceryHelperClass }>
             {this.props.children}
           </div>

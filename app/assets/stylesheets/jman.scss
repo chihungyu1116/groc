@@ -16,15 +16,21 @@
     border: 1px solid #B9B9B9;
     font-family: 'Open Sans Condensed',sans-serif;
     text-align: center;
+    overflow: hidden;
 }
 
+.onboarding .onboarding-container{
+  height: 100%;
+  width: 4000px;
+}
 .onboarding .onboarding-questionaire{
-    width: 100%;
+    width: 800px;
     height: 100%;
     text-align: center;
     font-size: 31px;
     color: #656565;
-    position: absolute;
+    float: left;
+    position: relative;
 }
 
 .onboarding .question{
@@ -47,6 +53,10 @@
   cursor: pointer;
 }
 
+.onboarding .option .msg{
+  font-size: 26px;
+  margin-top: 13px;
+}
 .onboarding .img{
   height: 191px;
   width: 200px;
@@ -63,6 +73,11 @@
 }
 .onboarding .self{
   margin-right: 17px;
+}
+
+.onboarding .male .img, .onboarding .female .img{
+  height: 165px;
+  width: 200px;
 }
 .jman .question{
   font-family: 'Francois One',sans-serif;
@@ -93,3 +108,94 @@
   font-size: 17px;
   margin-top: 13px;
 }
+
+.range-slider input[type="range"]{
+  width: 482px;
+}
+
+.household-size-info{
+  width: 482px;
+  margin: 0 auto;
+  font-size: 20px;
+}
+
+.household-size-info .min{
+  float: left;
+}
+
+.household-size-info .max{
+  float: right;
+}
+
+.kids-choices span{
+  font-size: 24px;
+  margin-right: 37px;
+}
+
+.skip-section{
+  position: absolute;
+  right: 12px;
+  top: 341px;
+}
+
+.skip-section a{
+  text-decoration: none;
+  font-size: 17px;
+  color: #4DB4D6;
+}
+
+.skip-section a:hover{
+  text-decoration: underline;
+  color: #50d1ee;
+}
+
+.category.question{
+  margin-bottom: 40px;
+}
+
+.category.question .hint{
+  font-size: 18px;
+  color: #EFAC42;
+}
+.select-categories .row{
+  width: 650px;
+  height: 97px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 23px;
+}
+.select-categories .option{
+  width: 100px;
+  height: 100%;
+  text-align: center;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.select-categories .option:hover{
+  background-color: rgba(136,216,234, 0.3);
+}
+.select-categories .option .info{
+  font-size: 18px;
+}
+.select-categories img{
+  width: 50px;
+  height: 50px;
+  margin-top: 7px;
+  cursor: pointer;
+}
+
+.select-categories img.beverage{
+  width: 26px;
+}
+
+.select-categories img.sports{
+  height: 22px;
+  margin-top: 20px;
+}
+
+.select-categories .info.sports{
+  margin-top: 12px;
+}
+
