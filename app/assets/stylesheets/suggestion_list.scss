@@ -1,11 +1,14 @@
 $primary-color: #007dc6; // walmart blue
 $secondary-color: #ffc120; // walmart yellow
+$add-to-cart-color: #f47421; // walmart orange
 $text-color: black;
 $background-color: white;
 $border-color: lightgrey;
 $font-size: 15px;
 $line-height: 18px;
 $border-radius: 4px;
+$price-container-width: 100px;
+$darken-percent: 5%;
 
 .yj-suggestion-list-container {
   position: fixed;
@@ -15,7 +18,7 @@ $border-radius: 4px;
   height: 400px;
   margin-left: -400px;
   margin-top: -200px;
-  padding: 10px;
+  padding: 15px 25px;
   background: $background-color;
   border: 1px solid #eee;
   transition: background-color 0.25s ease-out;
@@ -25,18 +28,18 @@ $border-radius: 4px;
 .yj-suggestion-list-title {
   color: $primary-color;
   text-align: center;  
+  margin-bottom: 15px;
 }
 
-.yj-suggestion-item-container {
+.yj-suggestion-item-container, .yj-suggestion-list-summary-container {
   box-sizing: border-box;
   font-size: $font-size;
   color: $text-color;
-  border-radius: $border-radius;
   width: 100%;
   height: 100px;
-  margin: 5px;
-  padding: 10px;
+  padding: 20px;
   &.thumbnail {
+    border-radius: $border-radius;
     border: 1px solid $border-color;
     text-align: center;
     width: 150px;
@@ -61,23 +64,41 @@ $border-radius: 4px;
 
 .yj-suggestion-item-name {
   height: 36px;
-  margin: 10px 0;
+  margin: 0 20px;
+  font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   &.tile {
-    width: 50%;
+    width: 45%;
     height: 100%;
   }
 }
 
-.yj-suggestion-item-price {
+.yj-suggestion-item-price-container {
+  width: $price-container-width;
+  height: 80%;
+  text-align: right;
+  float: right; 
+}
+
+$edit-height: 30px;
+.yj-suggestion-item-price-total {
+  margin-bottom: 0.5em;
+}
+
+.yj-suggestion-list-summary-container {
+  line-height: $edit-height;
+  font-size: 120%;
   color: $primary-color;
   font-weight: bold;
-  font-size: 120%;
-  &.tile {
-    width: 60px;
-    height: 80%;
-  }
+  text-align: right;
+  height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.yj-suggestion-item-price-each {
+  font-size: 80%;
 }
 
 .yj-suggestion-item-edit {
@@ -88,25 +109,69 @@ $border-radius: 4px;
 
 input.yj-suggestion-item-edit-count {
   width: 25px;
-  height: 30px;
+  height: $edit-height;
   box-sizing: border-box;
+  text-align: center;
 }
 
-.yj-suggestion-item-edit-button, .yj-suggestion-item-change-button {
-  width: 30px;
-  height: 30px;
-  background-color: $primary-color;
+.yj-suggestion-item-edit-button, .yj-suggestion-item-change-button,
+.yj-suggestion-list-add-to-cart-button, .yj-suggestion-list-cancel-button,
+.yj-view-cart-button, .yj-checkout-button {
   color: white;
+  height: $edit-height;
   outline: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  background-color: $primary-color;
+  &:hover {
+    background-color: darken($primary-color, $darken-percent);
+  }
+}
+
+.yj-view-cart-button, .yj-checkout-button {
+  width: 150px;
+  height: 30px;
+  font-size: 18px;
+  margin: 0 20px;
+}
+
+.yj-suggestion-list-add-to-cart-button, .yj-suggestion-list-cancel-button {
+  width: 140px;
+  font-weight: bold;
+}
+
+.yj-suggestion-list-add-to-cart-button {
+  margin-left: 30px;  
+}
+
+.yj-suggestion-list-add-to-cart-button, .yj-view-cart-button {
+  background-color: $add-to-cart-color;
+  &:hover {
+    background-color: darken($add-to-cart-color, $darken-percent);
+  }
+  
+}
+
+.yj-suggestion-list-cancel-button {
+  background-color: $border-color;
+  color: $text-color;
+  &:hover {
+    background-color: darken($border-color, $darken-percent);
+  }
+}
+
+.yj-suggestion-item-edit-button {
+  width: $edit-height;  
+  margin: 0;
 }
 
 .yj-suggestion-item-change-button {
   width: 80px;
-  margin-left: 10px;
 }
 
 .yj-suggestion-item-name, .yj-suggestion-item-id, 
-.yj-suggestion-item-price, .yj-suggestion-item-edit {
+.yj-suggestion-item-price-container, .yj-suggestion-item-edit {
   &.thumbnail {
     width: 100%;
   }
@@ -116,5 +181,62 @@ input.yj-suggestion-item-edit-count {
   }
 }
 
+.yj-add-to-cart-container {
+  width: 100%;
+  height: 100%;
+  color: $add-to-cart-color;
+  font-size: 25px;
+  display: table;
+  text-align: center;
+}
 
+.yj-add-to-cart-positioner {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.yj-add-to-cart-message, .yj-add-to-cart-button-list {
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  left: 0;
+}
+
+.yj-add-to-cart-message {
+  top: 35%;
+  -webkit-animation: bounce 2s normal; /* Chrome, Safari, Opera */ 
+  animation: bounce 2s normal;
+}
+
+.yj-add-to-cart-button-list {
+  top: 55%;
+}
+
+.yj-hidden {
+  display: none;
+}
+
+@keyframes bounce {
+  0% {
+    transform:translateY(-100%);
+    opacity: 0;
+  }
+  30% {
+    transform:translateY(0%);
+  }
+  40% {
+    transform:translateY(-10%);
+  }
+  60% {
+    transform:translateY(-5%);
+  }
+  90% {
+    transform:translateY(0%);
+  }
+  100% {
+    transform:translateY(0);
+    opacity: 1;
+  }
+}
 
