@@ -14,16 +14,22 @@ const defaultState = {
 }
 
 export default function SuggestionListReducer(state = defaultState, action) {
-  if(action.type === COMPLETED_PROCESSING_SHOPPING_LIST_ACT) {
+  if( action.type === COMPLETED_PROCESSING_SHOPPING_LIST_ACT) {
     return Object.assign({}, state, {
       suggestionList: action.shoppingList
     })
   } else if ( action.type === 'RECEIVED_ALTERNATIVE_ITEMS_ACT' ) {
-  	const { type, alternativeItems } = action
+  	const { alternativeItems } = action
 		return Object.assign({}, state, {
 			alternativeItems
     })
+  } else if ( action.type === 'SUGGESTION_LIST_CHANGED_ACT' ) {
+  	const { suggestionList } = action
+		return Object.assign({}, state, {
+			suggestionList,
+      alternativeItems: undefined
+    })  	
   }
 
-  return state;
+  return state
 }

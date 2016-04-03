@@ -1,6 +1,6 @@
 $primary-color: #007dc6; // walmart blue
 $secondary-color: #ffc120; // walmart yellow
-$add-to-cart-color: #f47421; // walmart orange
+$walmart-orange-color: #f47421; // walmart orange
 $text-color: black;
 $background-color: white;
 $border-color: lightgrey;
@@ -8,7 +8,7 @@ $font-size: 15px;
 $line-height: 18px;
 $border-radius: 4px;
 $price-container-width: 100px;
-$darken-percent: 5%;
+$darken-percent: 10%;
 
 .yj-suggestion-list-container {
   position: fixed;
@@ -40,13 +40,19 @@ $darken-percent: 5%;
   overflow: hidden;
   -webkit-transition: height 0.3s;
   transition: height 0.3s;
-  height: 227px;
+  height: 232px;
   &.collapsed {
     height: 0;
   }
+  &.empty {
+    font-size: 18px;
+    color: $secondary-color;
+    line-height: 50px;
+    height: 50px;
+  }
 }
 
-.yj-suggestion-item-container, .yj-suggestion-list-summary-container {
+.yj-suggestion-item-container {
   box-sizing: border-box;
   font-size: $font-size;
   color: $text-color;
@@ -57,7 +63,7 @@ $darken-percent: 5%;
     text-align: center;
     width: 150px;
     height: 210px;
-    padding-bottom: 5px;
+    padding: 5px;
     display: inline-block;
     vertical-align: top;
     &:hover {
@@ -73,6 +79,13 @@ $darken-percent: 5%;
     padding: 20px;
     margin: 0;
   }
+}
+
+.yj-suggestion-list-summary-container {
+  box-sizing: border-box;
+  font-size: $font-size;
+  color: $text-color;
+  padding: 20px;
 }
 
 .yj-suggestion-item-image {
@@ -171,9 +184,9 @@ input.yj-suggestion-item-edit-count {
 }
 
 .yj-suggestion-list-add-to-cart-button, .yj-view-cart-button {
-  background-color: $add-to-cart-color;
+  background-color: $walmart-orange-color;
   &:hover {
-    background-color: darken($add-to-cart-color, $darken-percent);
+    background-color: darken($walmart-orange-color, $darken-percent);
   }
   
 }
@@ -181,6 +194,10 @@ input.yj-suggestion-item-edit-count {
 .yj-suggestion-list-cancel-button {
   background-color: $border-color;
   color: $text-color;
+  & a {
+    color: $text-color;
+    text-decoration: none;
+  }
   &:hover {
     background-color: darken($border-color, $darken-percent);
   }
@@ -209,7 +226,7 @@ input.yj-suggestion-item-edit-count {
 .yj-add-to-cart-container {
   width: 100%;
   height: 100%;
-  color: $add-to-cart-color;
+  color: $walmart-orange-color;
   font-size: 25px;
   display: table;
   text-align: center;

@@ -14,12 +14,12 @@ export function fetchAlternativeItemsAct(itemIndex, query, count) {
 export function receivedAlternativeItemsAct(items, itemIndex, query, count) {
   return {
     type: 'RECEIVED_ALTERNATIVE_ITEMS_ACT',
-     alternativeItems: {
-        items: items, 
-        index: itemIndex, 
-        query, 
-        count
-      }
+    alternativeItems: {
+      items: items, 
+      index: itemIndex, 
+      query, 
+      count
+    }
   }
 }
 
@@ -32,5 +32,12 @@ function composeRequestData(json = {}){
     },
     credentials: 'same-origin',
     body: JSON.stringify(json)
+  }
+}
+
+export function suggestionListChangedAct(suggestionList) {
+  return {
+    type: 'SUGGESTION_LIST_CHANGED_ACT',
+    suggestionList: suggestionList
   }
 }

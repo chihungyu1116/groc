@@ -1,7 +1,7 @@
 import React, { Component , PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { fetchAlternativeItemsAct } from '../actions/SuggestionListAction'
+import { fetchAlternativeItemsAct, suggestionListChangedAct } from '../actions/SuggestionListAction'
 
 const LIST_CLASS_PREFIX = 'yj-suggestion-list'
 const ITEM_CLASS_PREFIX = 'yj-suggestion-item'
@@ -12,7 +12,8 @@ const ALTERNATIVE_ITEMS_COUNT = 5
 class SuggestionListContainer extends React.Component {
   constructor (props) {
     super(props)
-    this.updateSuggestionList = this.updateSuggestionList.bind(this)
+    this.updateSuggestionListCount = this.updateSuggestionListCount.bind(this)
+    this.updateSuggestionListItem = this.updateSuggestionListItem.bind(this)
     this.browseAlternativeItems = this.browseAlternativeItems.bind(this)
     this.addToCart = this.addToCart.bind(this)
   }
@@ -22,12 +23,12 @@ class SuggestionListContainer extends React.Component {
   }
 
   setInitialState() {
-    this.setState({dirty: false, addedToCart: false})
+    this.setState({dirty: false, addedToCart: false, showAlternativeItems: false})
   }
 
   componentWillReceiveProps(nextProps) {
-    const { suggestionList } = nextProps
-    this.setState({suggestionList: suggestionList})
+    const { suggestionList, alternativeItems } = nextProps
+    this.setState({suggestionList: suggestionList, showAlternativeItems: alternativeItems !== undefined})
   }
 
   renderSuggestionItems(items, itemCardType) {
@@ -36,7 +37,7 @@ class SuggestionListContainer extends React.Component {
       return (
         <div className={containerClasses} key={index}>
           { this.renderSuggestionItem(item, index, itemCardType) }
-          { this.renderAlternativeItems(item, index, itemCardType) }
+          { this.renderAlternativeItems(index, itemCardType) }
         </div>
       )
     })
@@ -64,7 +65,7 @@ class SuggestionListContainer extends React.Component {
     const cancelButtonClasses = this.getListClasses('cancel-button')
     return (
       <div className={containerClasses}>
-        <button className={cancelButtonClasses}>Not This Time</button>
+        <button className={cancelButtonClasses}><a href="">Not This Time</a></button>
         <button className={addToCartButtonClasses} onClick={this.addToCart}>Add to Cart</button>
       </div>
     )
@@ -85,29 +86,45 @@ class SuggestionListContainer extends React.Component {
     return `${LIST_CLASS_PREFIX}-${className}`
   }
 
-  renderAlternativeItems(thisItem, index, itemCardType) {
+  renderAlternativeItems(thisItemIndex, itemCardType) {
     const { alternativeItems } = this.props
-    if ( !alternativeItems || alternativeItems.index !==  index ) {
+    const { showAlternativeItems } = this.state
+    if ( !showAlternativeItems || !alternativeItems || alternativeItems.index !==  thisItemIndex ) {
       const containerClasses = this.getItemClasses('alternative-container collapsed')
       return <div className={containerClasses}></div>
     } else {
-      const containerClasses = this.getItemClasses('alternative-container')
       const { items } = alternativeItems
-      return (
-        <div className={containerClasses}>
-          { items.map((alterItem, altItemIndex) => {
-            const highlight = thisItem.data.id === alterItem.data.id
-            return this.renderSuggestionItem(alterItem, altItemIndex, 'thumbnail', highlight)
-          }) }
-        </div>
-      )
+      const suggestionList = this.getSuggestionList()
+      const noAlternatives = items.length === 1 && this.isSameItem(items[0], suggestionList[thisItemIndex])
+      if ( noAlternatives ) {
+        const containerClasses = this.getItemClasses('alternative-container empty')
+        setTimeout(() => {
+          this.setState({showAlternativeItems: false})
+        }, 1000)
+        return <div className={containerClasses}>Similar items are not found</div>
+      } else {
+        const containerClasses = this.getItemClasses('alternative-container')
+        return (
+          <div className={containerClasses}>
+            { items.map((altItem, altItemIndex) => {
+              return this.renderSuggestionItem(altItem, altItemIndex, 'thumbnail', thisItemIndex)
+            }) }
+          </div>
+        )
+      }
     }
   }
 
-  renderSuggestionItem(item, index, itemCardType, shouldHighlight) {
+  renderSuggestionItem(item, index, itemCardType, originalItemIndex) {
     const { data, price, query, count } = item
     itemCardType = itemCardType === 'thumbnail' ? 'thumbnail' : 'tile'
-    const containerClasses = this.getItemClasses(shouldHighlight ? `container current` : 'container', itemCardType)
+
+    let isCurrentItem = false
+    if ( originalItemIndex !== undefined ) {
+      const suggestionList = this.getSuggestionList()
+      isCurrentItem = this.isSameItem(item, suggestionList[originalItemIndex])
+    }
+    const containerClasses = this.getItemClasses(isCurrentItem ? `container current` : 'container', itemCardType)
     const nameClasses = this.getItemClasses('name', itemCardType)
     const imageClasses = this.getItemClasses('image', itemCardType)
     return (
@@ -116,27 +133,32 @@ class SuggestionListContainer extends React.Component {
         <div className={nameClasses}>{data.name}</div>
         { this.renderAmountEdit(index, count, itemCardType) }
         { this.renderPrice(price.list, count, itemCardType) }
-        { this.renderSelectButton(item, index, itemCardType) }
+        { this.renderSelectButton(item, originalItemIndex, itemCardType) }
       </div>
     )
   }
 
-  renderSelectButton(item, index, itemCardType) {
-    console.log(['renderSelectButton',item, index, itemCardType])
+  isSameItem(itemA, itemB) {
+    return itemA.data.id === itemB.data.id
+  }
+
+  renderSelectButton(item, indexToReplace, itemCardType) {
     if ( itemCardType !== 'thumbnail' ) { return null }
     const priceTotalClasses = this.getItemClasses('price-total', itemCardType)
     const selectAlternativeButtonClasses = this.getItemClasses('select-alternative-item-button', itemCardType)
+    const chooseThis = () => {
+      this.updateSuggestionListItem(indexToReplace, item)
+    }
     return (
-      <button className={selectAlternativeButtonClasses}>Choose</button>
+      <button className={selectAlternativeButtonClasses} onClick={chooseThis}>Choose</button>
     )
-
-
   }
 
   renderPrice(price, count, itemCardType) {
     const containerClasses = this.getItemClasses('price-container', itemCardType)
     const priceTotalClasses = this.getItemClasses('price-total', itemCardType)
-    const priceEachClasses = this.getItemClasses(`price-each ${count === 1 ? 'yj-hidden' : ''}`, itemCardType)
+    const showEachPrice = itemCardType === 'tile' && count > 1
+    const priceEachClasses = this.getItemClasses(showEachPrice ? 'price-each' : 'price-each yj-hidden', itemCardType)
     return price === undefined ? (<div className={containerClasses}>Price not available</div>) : (
       <div className={containerClasses}>
         <div className={priceTotalClasses}>{`$${(price * count).toFixed(2)}`}</div>
@@ -151,8 +173,8 @@ class SuggestionListContainer extends React.Component {
     const editButtonClasses = this.getItemClasses('edit-button')
     const changeButtonClasses = this.getItemClasses('change-button')
     const countClasses = this.getItemClasses('edit-count')
-    const addOne = () => { this.updateSuggestionList(index, Math.min(MAX_COUNT, count+1)) }
-    const subtractOne = () => { this.updateSuggestionList(index, Math.max(0, count-1)) }
+    const addOne = () => { this.updateSuggestionListCount(index, Math.min(MAX_COUNT, count+1)) }
+    const subtractOne = () => { this.updateSuggestionListCount(index, Math.max(0, count-1)) }
     const changeItem = (event) => { this.browseAlternativeItems(index) }
     return (
       <div className={editClasses}>
@@ -164,13 +186,16 @@ class SuggestionListContainer extends React.Component {
     )
   }
 
-  updateSuggestionList(itemIndex, newCount) {
+  updateSuggestionListCount(itemIndex, newCount) {
     const suggestionList = this.getSuggestionList()
     suggestionList[itemIndex].count = newCount
-    this.setState({
-      suggestionList: suggestionList,
-      dirty: true
-    })
+    this.props.suggestionListChangedAct(suggestionList)
+  }
+
+  updateSuggestionListItem(itemIndex, newItem) {
+    const suggestionList = this.getSuggestionList()
+    suggestionList[itemIndex] = newItem
+    this.props.suggestionListChangedAct(suggestionList)
   }
 
   browseAlternativeItems(itemIndex) {
@@ -180,7 +205,6 @@ class SuggestionListContainer extends React.Component {
   }
 
   addToCart() {
-    console.log('add to cart')
     // does not really add to cart
     this.setState({addedToCart: true})
   }
@@ -248,8 +272,11 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchAlternativeItemsAct: (itemIndex, query, count) => {
-      dispatch(fetchAlternativeItemsAct(itemIndex, query, count));
+      dispatch(fetchAlternativeItemsAct(itemIndex, query, count))
     },
+    suggestionListChangedAct: (suggestionList) => {
+      dispatch(suggestionListChangedAct(suggestionList))
+    }
   }
 }
 
