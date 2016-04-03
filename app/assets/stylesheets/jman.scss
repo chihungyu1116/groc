@@ -127,8 +127,12 @@
 
 .jman .option .img{
   margin-top: 17px;
-  height: 248px;
-  padding-top: 7px;
+  height: 222px;
+  padding-top: 28px;
+  width: 230px;
+  margin: 0 auto;
+  margin-top: 22px;
+  text-align: center;
 }
 
 .jman .option .img:hover{
@@ -284,4 +288,16 @@
   color: #fff;
   background: #E6C17D;
   border: 1px solid #E0AF55;
+}
+
+.onboarding-questionaire .progress-section{
+  position: absolute;
+  left: 8px;
+  top: 371px;
+  font-size: 18px;
+  color: #2FB3DE;
+}
+
+.event-shopping .option.selected .img{
+  border: 1px solid #00E7FF;
 }

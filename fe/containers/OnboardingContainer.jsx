@@ -19,6 +19,7 @@ class OnboardingContainer extends React.Component {
     this.slideToPrev = this.slideToPrev.bind(this)
     this.handleCategorySelect = this.handleCategorySelect.bind(this)
     this.select = this.select.bind(this)
+    this.submit = this.submit.bind(this)
   }
   setInitialState(){
     this.setState({
@@ -49,6 +50,9 @@ class OnboardingContainer extends React.Component {
     this.props.closeGroceryHelperAct();
     window.location.hash = '';
   }
+  submit(e){
+    console.log(e)
+  }
   select(event){
     let data = {}
     let $currentTarget = $(event.currentTarget)
@@ -66,6 +70,7 @@ class OnboardingContainer extends React.Component {
       $(this.refs.family_question).show()
     }
     if(special_event){
+      $currentTarget.addClass('selected')
       data.event = special_event
     }
     if(is_male){
@@ -77,10 +82,12 @@ class OnboardingContainer extends React.Component {
   slideToNext(){
      let $container = $(this.refs.container);
      let step = this.state.step + 1;
-     $container.animate({
-       left: "-" + step * FIX_WIDTH + "px"
-     }, 300)
-     this.setState({step: step})
+     if(step < 4){
+       $container.animate({
+         left: "-" + step * FIX_WIDTH + "px"
+       }, 300)
+       this.setState({step: step})
+     }
   }
   slideToPrev(){
     let $container = $(this.refs.container);
@@ -109,6 +116,7 @@ class OnboardingContainer extends React.Component {
                 </div>
                 <div className="msg">Shop for family</div>
               </div>
+              <div className="progress-section">Steps 1 / 4</div>
               <div className="skip-section">
                 <a href="#" onClick={this.closeHelper}>Come back later</a>
               </div>
@@ -133,6 +141,7 @@ class OnboardingContainer extends React.Component {
                 </div>
                 <div className="msg">Female</div>
               </div>
+              <div className="progress-section">Steps 2 / 4</div>
               <div className="skip-section">
                 <a href="#" onClick={this.closeHelper}>Come back later</a>
               </div>
@@ -169,6 +178,7 @@ class OnboardingContainer extends React.Component {
                 </RadioGroup>
               </div>
             </div>
+            <div className="progress-section">Steps 2 / 4</div>
             <div className="skip-section">
               <a href="#" onClick={this.closeHelper}>Come back later</a>
             </div>
@@ -180,6 +190,7 @@ class OnboardingContainer extends React.Component {
               <i className="fa fa-angle-right fa-2x" onClick={this.slideToNext}/>
             </div>
             <PreferredCategoryComponent handleCategorySelect={this.handleCategorySelect}/>
+            <div className="progress-section">Steps 3 / 4</div>
             <div className="skip-section">
               <a href="#" onClick={this.closeHelper}>Come back later</a>
             </div>
@@ -203,8 +214,9 @@ class OnboardingContainer extends React.Component {
                 <div className="msg">Baby Shower</div>
               </div>
             </div>
+            <div className="progress-section">Steps 4 / 4</div>
             <div className="submit">
-              <button>Check out the list!</button>
+              <button onClick={this.submit}>Check out the list!</button>
             </div>
             <div className="skip-section">
               <a href="#" onClick={this.closeHelper}>Come back later</a>
