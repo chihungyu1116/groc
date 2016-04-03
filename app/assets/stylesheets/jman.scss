@@ -18,7 +18,9 @@
     text-align: center;
     overflow: hidden;
 }
-
+.onboarding .onboarding-questionaire.two, .onboarding .onboarding-questionaire.three{
+  display: none;
+}
 .onboarding-questionaire .control{
   position: absolute;
   width: 100%;
@@ -126,12 +128,11 @@
 }
 
 .jman .option .img{
-  margin-top: 17px;
-  height: 222px;
-  padding-top: 28px;
+  height: 211px;
+  padding-top: 22px;
   width: 230px;
   margin: 0 auto;
-  margin-top: 22px;
+  margin-top: 33px;
   text-align: center;
 }
 
@@ -263,12 +264,14 @@
   width: 173px;
   padding: 10px;
 }
-
+.visual.event-shopping .msg{
+  font-size: 23px;
+}
 .onboarding-questionaire .submit{
   position: absolute;
   width: 100%;
   text-align: center;
-  top: 347px;
+  top: 338px;
 }
 
 .onboarding-questionaire .submit button{
