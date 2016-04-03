@@ -9,7 +9,7 @@ import {
 
 
 const defaultState = {
-  groceryHelperOpen: window.location.hash.match(/^\w+/) ? false : true
+  groceryHelperOpen: window.location.hash.replace(/\/.*/,'') === "#" ? false : true
 }
 
 export default function AppReducer(state = defaultState, action) {

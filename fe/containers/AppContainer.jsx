@@ -8,6 +8,8 @@ import {
 class AppContainer extends React.Component {
   render() {
     const { groceryHelperOpen } = this.props;
+
+    console.log('groceryHelperOpen', groceryHelperOpen)
     const groceryHelperClass = 'popup ' + (groceryHelperOpen ? 'open' : 'close');
     return (
       <div id="app">
