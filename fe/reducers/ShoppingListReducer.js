@@ -3,7 +3,7 @@ import {
   REMOVE_FROM_SHOPPING_LIST_ACT,
   ITEM_IS_ALREADY_IN_SHOPPING_LIST_ACT,
   SHOPPING_LIST_IS_EMPTY_ACT,
-  PROCESS_SHOPPING_LIST_ACT
+  FAILED_PROCESSING_SHOPPING_LIST_ACT
 } from '../actions/ShoppingListAction';
 
 const defaultState = {
@@ -12,6 +12,7 @@ const defaultState = {
 
 const MESSAGE_DUPLICATE_ITEM = 'Item is already in the shopping list!';
 const SHOPPING_LIST_EMPTY = 'Your shopping list is empty!';
+const ITEMS_NOT_FOUND = 'Cannot find items in the shopping list';
 const MESSAGE_NOTHING = '';
 
 export default function ShoppingListReducer(state = defaultState, action) {
@@ -35,13 +36,15 @@ export default function ShoppingListReducer(state = defaultState, action) {
       message: SHOPPING_LIST_EMPTY
     });
   } else if(action.type === REMOVE_FROM_SHOPPING_LIST_ACT) {
-
-    console.log('action: ', action)
     const newList = state.list.slice();
     newList.splice(action.index, 1);
 
     return Object.assign({}, state, {
       list: newList
+    });
+  } else if(action.type === FAILED_PROCESSING_SHOPPING_LIST_ACT) {
+    return Object.assign({}, state, {
+      message: ITEMS_NOT_FOUND
     });
   }
 

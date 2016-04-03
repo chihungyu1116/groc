@@ -49,6 +49,8 @@ AppContainer.propTypes = {
 function mapStateToProps(state) {
   const { groceryHelperOpen } = state.AppReducer;
 
+  console.log(state.SuggestionListReducer)
+
   return {
     groceryHelperOpen
   };

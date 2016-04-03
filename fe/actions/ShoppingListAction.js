@@ -55,7 +55,11 @@ export function processShoppingListAct(list) {
     fetch('/data/process_shopping_list', data)
       .then(response => response.json())
       .then(json => {
-        dispatch(completedProcessingShoppingListAct(json.shopping_list))
+        if(json.found) {
+          dispatch(completedProcessingShoppingListAct(json.shopping_list));
+        } else {
+          dispatch(failedProcessingShoppingListAct());
+        }
       });
   }
 }
@@ -66,5 +70,13 @@ export function completedProcessingShoppingListAct(shoppingList) {
   return {
     type: COMPLETED_PROCESSING_SHOPPING_LIST_ACT,
     shoppingList
+  }
+}
+
+export const FAILED_PROCESSING_SHOPPING_LIST_ACT = 'FAILED_PROCESSING_SHOPPING_LIST_ACT';
+
+export function failedProcessingShoppingListAct() {
+  return {
+    type: FAILED_PROCESSING_SHOPPING_LIST_ACT
   }
 }
