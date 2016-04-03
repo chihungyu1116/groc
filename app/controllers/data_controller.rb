@@ -6,31 +6,36 @@ class DataController < ApplicationController
     # "https://grocery-api-stg2.walmart.com",
     "https://grocery-api.qa.grocery-api.qa.walmart.com"
   ]
-
+  # We only have 12 categories, Baby & Toys,Electronics,Kitchen & Tools,Meat,Bakery,Seafood,Milk & Cream,Fruits,Vegetables,Beverage,Snacks,Sports
   CAT_ID_MAP = {
-    "fresh fruit" => "1",
-    "fresh vegatable" => "2",
-    "beef" => "3",
-    "poultry" => "4",
-    "pork" => "5",
-    "bacon, hot dog & sausage" => "6",
-    "milk & cream" => "7",
-    "egg" => "8",
-    "bread" => "9",
-    "cereal & breakfast food" => "10",
-    "pasta, potatoes & side dishes" => "11",
-    "candy" => "12",
-    "nuts & dried fruit" => "13",
-    "snack bars" => "14",
-    "beers & coolers" => "15",
-    "coffee" => "16",
-    "soft drinks" => "17",
-    "baby bath & skin care" => "18",
-    "diapers & wipes" => "19",
-    "dogs" => "20",
-    "cats" => "21",
-    "dish detergents" => "22",
-    "cleaners" => "23"
+    "Fruits" => "1",
+    "Vegetables" => "2",
+    "Meat" => "3",
+    # "poultry" => "4",
+    # "pork" => "5",
+    # "bacon, hot dog & sausage" => "6",
+    "Milk & Cream" => "7",
+    # "egg" => "8",
+    "Bakery" => "9",
+    # "cereal & breakfast food" => "10",
+    # "pasta, potatoes & side dishes" => "11",
+    # "candy" => "12",
+    # "nuts & dried fruit" => "13",
+    "Snacks" => "14",
+    "Beverage" => "15",
+    # "coffee" => "16",
+    # "soft drinks" => "17",
+    # "baby bath & skin care" => "18",
+    # "diapers & wipes" => "19",
+    # "dogs" => "20",
+    # "cats" => "21",
+    # "dish detergents" => "22",
+    # "cleaners" => "23",
+    "Baby & Toys" => "24", #baby  3000016632 diaper 3000651161 baby cereal 3000194950 building bag
+    "Electronics" => "25", #electronics 3000407698 earpods 3000176612 photo paper 3001277674 movie
+    "Kitchen & Tools" => "26", #kitchen tools 3000225563 bleach 3000698083 mop express 3000090336 trash bag
+    "Seafood" => "27", #Seafood	3000408330	Salmon	3000408387	Crab	3000289983	Crab
+    "Sports" => "28"  #Sports 3000126994 baseball 3000163876 basketball 3000262540 football
   }
 
   CAT_DATA = {
@@ -323,7 +328,7 @@ class DataController < ApplicationController
   private
 
   def find_item_by_query query, count = 1
-    uri = URI.parse "https://grocery-api.qa.grocery-api.qa.walmart.com/search?store=5884&query=#{query}&start=0&count=#{count}"
+    uri = URI.parse "https://grocery-api.qa.grocery-api.qa.walmart.com/search?store=9080&query=#{query}&start=0&count=#{count}"
     res = Net::HTTP.get_response uri
 
     res
