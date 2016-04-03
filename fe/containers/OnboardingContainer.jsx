@@ -1,22 +1,31 @@
 import React, { Component , PropTypes } from 'react'
 import { connect } from 'react-redux'
 import RadioGroup from 'react-radio-group'
+import PreferredCategoryComponent from "../components/PreferredCategoryComponent.jsx"
 import {
   openGroceryHelperAct,
   closeGroceryHelperAct
 } from '../actions/AppAction';
 import ReactSliderNativeBootstrap from 'react-bootstrap-native-slider';
-
+import _ from 'lodash'
+const FIX_WIDTH = 700
 class OnboardingContainer extends React.Component {
   componentWillMount() {
     this.setInitialState()
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKidChange = this.handleKidChange.bind(this);
+    this.handleChange = this.handleChange.bind(this)
+    this.handleKidChange = this.handleKidChange.bind(this)
+    this.closeHelper = this.closeHelper.bind(this)
+    this.slideToNext = this.slideToNext.bind(this)
+    this.slideToPrev = this.slideToPrev.bind(this)
+    this.handleCategorySelect = this.handleCategorySelect.bind(this)
+    this.select = this.select.bind(this)
   }
   setInitialState(){
     this.setState({
       householdSize:5,
-      is_shop_for_kid: 'yes'
+      is_shop_for_kid: 'yes',
+      step: 0,
+      categories: []
     })
   }
   handleKidChange(value){
@@ -25,29 +34,76 @@ class OnboardingContainer extends React.Component {
   handleChange(e){
       this.setState({'householdSize': $(e.target).val()})
   }
+  handleCategorySelect(isAdd, category){
+    var categories = this.state.categories
+    if(isAdd){
+      categories.push(category)
+    }else{
+      _.remove(categories, item => {
+        return item === category
+      })
+    }
+    this.setState({categories: categories})
+  }
   closeHelper(){
     this.props.closeGroceryHelperAct();
     window.location.hash = '';
   }
+  select(event){
+    let data = {}
+    let $currentTarget = $(event.currentTarget)
+    let is_shop_for_self = $currentTarget.attr("data-is-shop-for-self")
+    let is_male = $currentTarget.attr("data-is-male")
+    let special_event = $currentTarget.attr("data-special-event")
+    if(is_shop_for_self){
+      data.is_shop_for_self = is_shop_for_self === 'true' ? true : false
+    }
+    if(data.is_shop_for_self){
+      $(this.refs.family_question).hide()
+      $(this.refs.gender_question).show()
+    }else{
+      $(this.refs.gender_question).hide()
+      $(this.refs.family_question).show()
+    }
+    if(special_event){
+      data.event = special_event
+    }
+    if(is_male){
+      data.gender = is_male === 'true' ? "male" : "female"
+    }
+    this.setState(data)
+    this.slideToNext();
+  }
+  slideToNext(){
+     let $container = $(this.refs.container);
+     let step = this.state.step + 1;
+     $container.animate({
+       left: "-" + step * FIX_WIDTH + "px"
+     }, 300)
+     this.setState({step: step})
+  }
+  slideToPrev(){
+    let $container = $(this.refs.container);
+    let step = this.state.step - 1;
+    $container.animate({
+      left: "-" + step * FIX_WIDTH + "px"
+    }, 300)
+    this.setState({step: step })
+  }
   render() {
-    const { routes, params } = this.props;
-    var divStyle = {
-      display: 'none'
-    };
-
     return (
       <div className='onboarding'>
-        <div className="onboarding-container">
-          <div className="onboarding-questionaire one" style={divStyle}>
+        <div className="onboarding-container" ref="container">
+          <div className="onboarding-questionaire one">
             <div className="question">What best describe your shopping now?</div>
             <div className="visual">
-              <div className="self option">
+              <div className="self option" onClick={event => this.select(event)} data-is-shop-for-self={true}>
                 <div className="img">
                   <img src="/assets/self-image.png" className="self-image"/>
                 </div>
                 <div className="msg">Shop for self</div>
               </div>
-              <div className="family option">
+              <div className="family option" onClick={event => this.select(event)} data-is-shop-for-self={false}>
                 <div className="img">
                   <img src="/assets/family-image.png" className="family-image"/>
                 </div>
@@ -58,16 +114,20 @@ class OnboardingContainer extends React.Component {
               </div>
             </div>
           </div>
-          <div className="onboarding-questionaire two" style={divStyle}>
+          <div className="onboarding-questionaire two" ref="gender_question">
             <div className="question">What is your gender?</div>
+            <div className="control">
+              <i className="fa fa-angle-left fa-2x" onClick={this.slideToPrev}/>
+              <i className="fa fa-angle-right fa-2x" onClick={this.slideToNext}/>
+            </div>
             <div className="visual">
-              <div className="male option">
+              <div className="male option" onClick={event => this.select(event)} data-is-male={true}>
                 <div className="img">
                   <img src="/assets/male.png"/>
                 </div>
                 <div className="msg">Male</div>
               </div>
-              <div className="female option">
+              <div className="female option" onClick={event => this.select(event)} data-is-male={false}>
                 <div className="img">
                   <img src="/assets/female.png"/>
                 </div>
@@ -78,8 +138,12 @@ class OnboardingContainer extends React.Component {
               </div>
             </div>
           </div>
-          <div className="onboarding-questionaire three" style={divStyle}>
+          <div className="onboarding-questionaire three" ref="family_question">
             <div className="question">How many people are you shopping for?</div>
+            <div className="control">
+              <i className="fa fa-angle-left fa-2x" onClick={this.slideToPrev}/>
+              <i className="fa fa-angle-right fa-2x" onClick={this.slideToNext}/>
+            </div>
             <div className="range-slider">
               <input
                   type="range"
@@ -111,59 +175,36 @@ class OnboardingContainer extends React.Component {
           </div>
           <div className="onboarding-questionaire four">
             <div className="category question">Preferred categories <span className="hint"> (Pick up to three)</span></div>
-            <div className="select-categories">
-              <div className="row">
-                <div className="option">
-                  <img src="/assets/vegetables.png"/>
-                  <div className="info">Vegetables</div>
+            <div className="control">
+              <i className="fa fa-angle-left fa-2x" onClick={this.slideToPrev}/>
+              <i className="fa fa-angle-right fa-2x" onClick={this.slideToNext}/>
+            </div>
+            <PreferredCategoryComponent handleCategorySelect={this.handleCategorySelect}/>
+            <div className="skip-section">
+              <a href="#" onClick={this.closeHelper}>Come back later</a>
+            </div>
+          </div>
+          <div className="onboarding-questionaire five">
+            <div className="question">Are you shopping for any events?</div>
+            <div className="control">
+              <i className="fa fa-angle-left fa-2x" onClick={this.slideToPrev}/>
+            </div>
+            <div className="visual event-shopping">
+              <div className="option" onClick={event => this.select(event)} data-special-event="birthday">
+                <div className="img">
+                  <img src="/assets/birthday-cake.png"/>
                 </div>
-                <div className="option">
-                  <img src="/assets/fruits.png"/>
-                  <div className="info">Fruits</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/meat.png"/>
-                  <div className="info">Meat</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/bakery.png"/>
-                  <div className="info">Bakery</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/seafood.png"/>
-                  <div className="info">Seafood</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/milk.png"/>
-                  <div className="info">Milk & Cream</div>
-                </div>
+                <div className="msg">Birthday Party</div>
               </div>
-              <div className="row">
-                <div className="option">
-                  <img src="/assets/beverage.png" className="beverage"/>
-                  <div className="info">Beverage</div>
+              <div className="option" onClick={event => this.select(event)} data-special-event="baby-shower">
+                <div className="img">
+                  <img src="/assets/baby.png"/>
                 </div>
-                <div className="option">
-                  <img src="/assets/snacks.png"/>
-                  <div className="info">Snacks</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/kitchen.png"/>
-                  <div className="info">Kitchen & Tools</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/toys.png"/>
-                  <div className="info">Baby & Toys</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/electroincs.png"/>
-                  <div className="info">Electronics</div>
-                </div>
-                <div className="option">
-                  <img src="/assets/sports.png" className="sports"/>
-                  <div className="info sports">Sports</div>
-                </div>
+                <div className="msg">Baby Shower</div>
               </div>
+            </div>
+            <div className="submit">
+              <button>Check out the list!</button>
             </div>
             <div className="skip-section">
               <a href="#" onClick={this.closeHelper}>Come back later</a>

@@ -21,7 +21,7 @@ class GroceryHelperContainer extends React.Component {
             <div className="img">
               <img src="/assets/shoppinglist.png"/>
             </div>
-            <div className="msg">Shop With Shopping list</div>
+            <div className="msg">Shop With Shopping List</div>
           </a>
         </div>
         <div className="option">
