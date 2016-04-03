@@ -25,6 +25,7 @@ class OnboardingContainer extends React.Component {
     this.setState({
       householdSize:5,
       is_shop_for_kid: 'yes',
+      gender: "male",
       step: 0,
       categories: []
     })
@@ -51,7 +52,14 @@ class OnboardingContainer extends React.Component {
     window.location.hash = '';
   }
   submit(e){
-    console.log(e)
+    let data = {}
+    data.num_household = this.state.householdSize
+    data.single = this.state.is_shop_for_self
+    data.gender = this.state.gender
+    data.has_kids = this.state.is_shop_for_kid == "yes" ? true : false
+    data.event = this.state.event
+    data.categories = this.state.categories.join(',')
+    console.log(data)
   }
   select(event){
     let data = {}
