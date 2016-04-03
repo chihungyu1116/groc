@@ -15,9 +15,9 @@ $darken-percent: 5%;
   top: 50%;
   left: 50%;
   width: 800px;
-  height: 400px;
+  height: 600px;
   margin-left: -400px;
-  margin-top: -200px;
+  margin-top: -300px;
   padding: 15px 25px;
   background: $background-color;
   border: 1px solid #eee;
@@ -31,24 +31,46 @@ $darken-percent: 5%;
   margin-bottom: 15px;
 }
 
+.yj-suggestion-item-outer-container {
+  border-bottom: 1px solid $border-color;
+}
+
+.yj-suggestion-item-alternative-container {
+  text-align: center;
+  overflow: hidden;
+  -webkit-transition: height 0.3s;
+  transition: height 0.3s;
+  height: 227px;
+  &.collapsed {
+    height: 0;
+  }
+}
+
 .yj-suggestion-item-container, .yj-suggestion-list-summary-container {
   box-sizing: border-box;
   font-size: $font-size;
   color: $text-color;
-  width: 100%;
-  height: 100px;
-  padding: 20px;
   &.thumbnail {
     border-radius: $border-radius;
     border: 1px solid $border-color;
+    margin: 10px 4px;
     text-align: center;
     width: 150px;
-    height: 180px;
+    height: 210px;
+    padding-bottom: 5px;
     display: inline-block;
     vertical-align: top;
+    &:hover {
+      border: 2px solid $border-color;
+    }
+    &.current {
+      border: 2px solid $primary-color;
+    }
   }
   &.tile {
-    border-bottom: 1px solid $border-color;
+    width: 100%;
+    height: 100px;
+    padding: 20px;
     margin: 0;
   }
 }
@@ -64,11 +86,11 @@ $darken-percent: 5%;
 
 .yj-suggestion-item-name {
   height: 36px;
-  margin: 0 20px;
   font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   &.tile {
+    margin: 0 20px;
     width: 45%;
     height: 100%;
   }
@@ -76,9 +98,11 @@ $darken-percent: 5%;
 
 .yj-suggestion-item-price-container {
   width: $price-container-width;
-  height: 80%;
-  text-align: right;
-  float: right; 
+  &.tile {
+    text-align: right;
+    float: right; 
+    height: 80%;
+  }
 }
 
 $edit-height: 30px;
@@ -102,7 +126,6 @@ $edit-height: 30px;
 }
 
 .yj-suggestion-item-edit {
-  //border: 1px solid green;
   width: 200px;
   height: 80%;
 }
@@ -116,7 +139,9 @@ input.yj-suggestion-item-edit-count {
 
 .yj-suggestion-item-edit-button, .yj-suggestion-item-change-button,
 .yj-suggestion-list-add-to-cart-button, .yj-suggestion-list-cancel-button,
-.yj-view-cart-button, .yj-checkout-button {
+.yj-view-cart-button, .yj-checkout-button,
+.yj-suggestion-item-select-alternative-item-button {
+  font-size: 15px;
   color: white;
   height: $edit-height;
   outline: none;
@@ -138,7 +163,7 @@ input.yj-suggestion-item-edit-count {
 
 .yj-suggestion-list-add-to-cart-button, .yj-suggestion-list-cancel-button {
   width: 140px;
-  font-weight: bold;
+  font-size: 17px;
 }
 
 .yj-suggestion-list-add-to-cart-button {

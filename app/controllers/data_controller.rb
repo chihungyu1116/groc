@@ -15,6 +15,18 @@ class DataController < ApplicationController
     render json: { shopping_list: result }
   end
 
+  def get_items_by_query
+    query = params[:query]
+    count = params[:count]
+    items = JSON.parse(query_item(query, count).body)['products']
+    items = items.map { |item|
+      item[:count] = 1
+      item[:query] = query
+      item
+    }
+    render json: { items: items }
+  end
+
   private
 
   def query_item query, count = 1

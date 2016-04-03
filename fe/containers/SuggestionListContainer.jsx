@@ -1,10 +1,12 @@
 import React, { Component , PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import { fetchAlternativeItemsAct } from '../actions/SuggestionListAction'
 
 const LIST_CLASS_PREFIX = 'yj-suggestion-list'
 const ITEM_CLASS_PREFIX = 'yj-suggestion-item'
 const MAX_COUNT = 20
+const ALTERNATIVE_ITEMS_COUNT = 5
 
 
 class SuggestionListContainer extends React.Component {
@@ -29,9 +31,10 @@ class SuggestionListContainer extends React.Component {
   }
 
   renderSuggestionItems(items, itemCardType) {
+    const containerClasses = this.getItemClasses('outer-container')
     return items.map((item, index) => {
       return (
-        <div key={index}>
+        <div className={containerClasses} key={index}>
           { this.renderSuggestionItem(item, index, itemCardType) }
           { this.renderAlternativeItems(item, index, itemCardType) }
         </div>
@@ -82,35 +85,58 @@ class SuggestionListContainer extends React.Component {
     return `${LIST_CLASS_PREFIX}-${className}`
   }
 
-  renderAlternativeItems(item, index, itemCardType) {
-    const containerClasses = this.getItemClasses('container', itemCardType)
-    return true ? null : (
-      <div className={containerClasses}>
-        abcdefg
-      </div>
+  renderAlternativeItems(thisItem, index, itemCardType) {
+    const { alternativeItems } = this.props
+    if ( !alternativeItems || alternativeItems.index !==  index ) {
+      const containerClasses = this.getItemClasses('alternative-container collapsed')
+      return <div className={containerClasses}></div>
+    } else {
+      const containerClasses = this.getItemClasses('alternative-container')
+      const { items } = alternativeItems
+      return (
+        <div className={containerClasses}>
+          { items.map((alterItem, altItemIndex) => {
+            const highlight = thisItem.data.id === alterItem.data.id
+            return this.renderSuggestionItem(alterItem, altItemIndex, 'thumbnail', highlight)
+          }) }
+        </div>
       )
+    }
   }
 
-  renderSuggestionItem(item, index, itemCardType) {
+  renderSuggestionItem(item, index, itemCardType, shouldHighlight) {
     const { data, price, query, count } = item
     itemCardType = itemCardType === 'thumbnail' ? 'thumbnail' : 'tile'
-    const containerClasses = this.getItemClasses('container', itemCardType)
+    const containerClasses = this.getItemClasses(shouldHighlight ? `container current` : 'container', itemCardType)
     const nameClasses = this.getItemClasses('name', itemCardType)
     const imageClasses = this.getItemClasses('image', itemCardType)
     return (
-      <div className={containerClasses}>
+      <div key={index} className={containerClasses}>
         <img className={imageClasses} src={data.images.thumbnail} />
         <div className={nameClasses}>{data.name}</div>
         { this.renderAmountEdit(index, count, itemCardType) }
-        { this.renderPrice(price.list, count) }
+        { this.renderPrice(price.list, count, itemCardType) }
+        { this.renderSelectButton(item, index, itemCardType) }
       </div>
     )
   }
 
-  renderPrice(price, count) {
-    const containerClasses = this.getItemClasses('price-container')
-    const priceTotalClasses = this.getItemClasses('price-total')
-    const priceEachClasses = this.getItemClasses(`price-each ${count === 1 ? 'yj-hidden' : ''}`)
+  renderSelectButton(item, index, itemCardType) {
+    console.log(['renderSelectButton',item, index, itemCardType])
+    if ( itemCardType !== 'thumbnail' ) { return null }
+    const priceTotalClasses = this.getItemClasses('price-total', itemCardType)
+    const selectAlternativeButtonClasses = this.getItemClasses('select-alternative-item-button', itemCardType)
+    return (
+      <button className={selectAlternativeButtonClasses}>Choose</button>
+    )
+
+
+  }
+
+  renderPrice(price, count, itemCardType) {
+    const containerClasses = this.getItemClasses('price-container', itemCardType)
+    const priceTotalClasses = this.getItemClasses('price-total', itemCardType)
+    const priceEachClasses = this.getItemClasses(`price-each ${count === 1 ? 'yj-hidden' : ''}`, itemCardType)
     return price === undefined ? (<div className={containerClasses}>Price not available</div>) : (
       <div className={containerClasses}>
         <div className={priceTotalClasses}>{`$${(price * count).toFixed(2)}`}</div>
@@ -150,8 +176,7 @@ class SuggestionListContainer extends React.Component {
   browseAlternativeItems(itemIndex) {
     const suggestionList = this.getSuggestionList()
     const query = suggestionList[itemIndex].query
-    console.log(['browseAlternativeItems', itemIndex, query])
-
+    this.props.fetchAlternativeItemsAct(itemIndex, query, ALTERNATIVE_ITEMS_COUNT)
   }
 
   addToCart() {
@@ -186,7 +211,7 @@ class SuggestionListContainer extends React.Component {
       <div className={listContainerClasses}>
         <div className="yj-add-to-cart-container">
           <div className="yj-add-to-cart-positioner">
-            <div className="yj-add-to-cart-message">Items have been added to cart</div>
+            <div className="yj-add-to-cart-message">Good news, items have been added to cart</div>
             <div className="yj-add-to-cart-button-list">
               <button className="yj-view-cart-button">
                 View Cart <i className="fa fa-shopping-cart"></i>
@@ -214,10 +239,18 @@ SuggestionListContainer.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { suggestionList } = state.SuggestionListReducer
+  const { suggestionList, alternativeItems } = state.SuggestionListReducer
   return {
-    suggestionList
-  };
+    suggestionList, alternativeItems
+  }
 }
 
-export default connect(mapStateToProps)(SuggestionListContainer)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchAlternativeItemsAct: (itemIndex, query, count) => {
+      dispatch(fetchAlternativeItemsAct(itemIndex, query, count));
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SuggestionListContainer)
