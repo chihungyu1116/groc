@@ -2,8 +2,8 @@ class DataController < ApplicationController
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
 
   SERVICES = [
-    "https://grocery-api-stg1.walmart.com",
-    "https://grocery-api-stg2.walmart.com",
+    # "https://grocery-api-stg1.walmart.com",
+    # "https://grocery-api-stg2.walmart.com",
     "https://grocery-api.qa.grocery-api.qa.walmart.com"
   ]
 
@@ -229,7 +229,7 @@ class DataController < ApplicationController
   def get_items_by_query
     query = params[:query]
     count = params[:count]
-    items = JSON.parse(query_item(query, count).body)['products']
+    items = JSON.parse(find_item_by_query(query, count).body)['products']
     items = items.map { |item|
       item[:count] = 1
       item[:query] = query
@@ -274,7 +274,8 @@ class DataController < ApplicationController
     end
 
     results = []
-    item_ids.each do |item_id|
+
+    item_ids.sample(10).each do |item_id|
       item = JSON.parse(find_item_by_id(item_id).body)
 
       if item.nil?
@@ -320,19 +321,9 @@ class DataController < ApplicationController
 
   private
 
-  def services
-
-  end
-
   def find_item_by_query query, count = 1
-    resource = "/search?store=5884&query=#{query}&start=0&count=#{count}"
-    res = nil
-
-    SERVICES.each do |service_uri|
-      uri = URI.parse "#{service_uri}#{resource}"
-      res = Net::HTTP.get_response uri, {open_timeout: 1}
-      return res if res
-    end
+    uri = URI.parse "https://grocery-api.qa.grocery-api.qa.walmart.com/search?store=5884&query=#{query}&start=0&count=#{count}"
+    res = Net::HTTP.get_response uri
 
     res
   end
