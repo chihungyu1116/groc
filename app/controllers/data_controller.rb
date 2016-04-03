@@ -220,6 +220,7 @@ class DataController < ApplicationController
       end
 
       result[:query] = query;
+      result[:count] = 1
       results << result
     end
 
@@ -285,7 +286,7 @@ class DataController < ApplicationController
         result = item
       end
 
-      # result[:query] = query;
+      result[:count] = 1;
       results << result
     end
 
