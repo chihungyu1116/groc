@@ -5,6 +5,11 @@ import PreferredCategoryComponent from "../components/PreferredCategoryComponent
 import {
   processOnboardingDataAct  
 } from '../actions/OnboardingAction';
+import {
+    openGroceryHelperAct,
+    closeGroceryHelperAct
+} from '../actions/AppAction';
+
 import ReactSliderNativeBootstrap from 'react-bootstrap-native-slider';
 import _ from 'lodash';
 const FIX_WIDTH = 700;
@@ -252,6 +257,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     processOnboardingDataAct : (data) => {
       dispatch(processOnboardingDataAct(data));
+    },
+    closeGroceryHelperAct : () => {
+      dispatch(closeGroceryHelperAct());
     }
   }
 }

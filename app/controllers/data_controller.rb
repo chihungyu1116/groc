@@ -35,7 +35,7 @@ class DataController < ApplicationController
                      query: 'apple'
                    }, {
                      id: 3000012437,
-                     query: 'clementine'
+                     query: 'orange'
                    }, {
                      id: 1022852,
                      query: 'grape'
@@ -353,6 +353,29 @@ class DataController < ApplicationController
     {id: 3000230725, query: 'dog snack'}
   ]
 
+  BIRTHDAY_PARTY_LIST = [
+      {id: 3000820584, query: 'chocolate'},
+      {id: 3000776182, query: 'bacon'},
+      {id: 3000354238, query: 'pizza'},
+      {id: 1025924, query: 'creme cake'},
+      {id: 3000817685, query: 'nut muffin'},
+      {id: 3000373438, query: 'Dinner Plates'},
+      {id: 3000943309, query: 'Cutlery'},
+      {id: 3001174734, query: 'berry pie'},
+      {id: 3000204881, query: 'twister game'}
+  ]
+
+  BABY_SHOWER_LIST = [
+      {id: 3000820584, query: 'chocolate'},
+      {id: 3000776182, query: 'bacon'},
+      {id: 3000354238, query: 'pizza'},
+      {id: 1025924, query: 'creme cake'},
+      {id: 3000817685, query: 'nut muffin'},
+      {id: 3000373438, query: 'Dinner Plates'},
+      {id: 3000943309, query: 'Cutlery'},
+      {id: 3001174734, query: 'berry pie'},
+      {id: 1023721, query: 'soda'}
+  ]
   def process_shopping_list
     results = []
     found = false
@@ -413,19 +436,27 @@ class DataController < ApplicationController
     items.concat GENERAL_LIST_FOR_KIDS.sample(3) if params[:has_kids]
 
     params[:categories].split(',').each do |category|
-      if CAT_DATA[category]
+      map_id = CAT_ID_MAP[category]
+      if CAT_DATA[map_id]
         if is_single
-          items.concat CAT_DATA[category]['single'].sample(2)
+          items.concat CAT_DATA[map_id]['single'].sample(2)
         else
-          items.concat CAT_DATA[category]['family'].sample(2)
+          items.concat CAT_DATA[map_id]['family'].sample(2)
         end
       end
     end
-
+    if params[:event].present?
+      if params[:event] == "baby-shower"
+        items.concat BABY_SHOWER_LIST.sample(5)
+      elsif params[:event] == "birthday"
+        items.concat BIRTHDAY_PARTY_LIST.sample(5)
+      end
+    end
     results = []
     found = false
-
-    items.sample(10).each do |item|
+    
+    items = items.uniq {|item| item[:id]}
+    items.sample(12).each do |item|
       item_response = JSON.parse(find_item_by_id(item[:id]).body)
 
       if item_response.nil?

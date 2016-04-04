@@ -7,7 +7,10 @@ const LIST_CLASS_PREFIX = 'yj-suggestion-list'
 const ITEM_CLASS_PREFIX = 'yj-suggestion-item'
 const MAX_COUNT = 20
 const ALTERNATIVE_ITEMS_COUNT = 5
-
+import {
+    openGroceryHelperAct,
+    closeGroceryHelperAct
+} from '../actions/AppAction';
 
 class SuggestionListContainer extends React.Component {
   constructor (props) {
@@ -16,6 +19,7 @@ class SuggestionListContainer extends React.Component {
     this.updateSuggestionListItem = this.updateSuggestionListItem.bind(this)
     this.browseAlternativeItems = this.browseAlternativeItems.bind(this)
     this.addToCart = this.addToCart.bind(this)
+    this.closeList = this.closeList.bind(this)
   }
 
   componentWillMount() {
@@ -59,13 +63,17 @@ class SuggestionListContainer extends React.Component {
     )
   }
 
+  closeList(){
+    this.props.closeGroceryHelperAct();
+    window.location.hash = '';
+  }
   renderSuggestionListActions() {
     const containerClasses = this.getListClasses('summary-container')
     const addToCartButtonClasses = this.getListClasses('add-to-cart-button')
     const cancelButtonClasses = this.getListClasses('cancel-button')
     return (
       <div className={containerClasses}>
-        <button className={cancelButtonClasses}><a href="">Not This Time</a></button>
+        <button className={cancelButtonClasses} onClick={this.closeList}>Not This Time</button>
         <button className={addToCartButtonClasses} onClick={this.addToCart}>Add to Cart</button>
       </div>
     )
@@ -220,7 +228,7 @@ class SuggestionListContainer extends React.Component {
     const suggestionList = this.getSuggestionList()
     const listContainerClasses = this.getListClasses('container')
     const listTitleClasses = this.getListClasses('title')
-    const title = "We've put together a shopping list for you"
+    const title = "We've put together a shopping list just for you"
     return (
       <div className={listContainerClasses}>
         <h3 className={listTitleClasses}>{title}</h3>
@@ -281,6 +289,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     suggestionListChangedAct: (suggestionList) => {
       dispatch(suggestionListChangedAct(suggestionList))
+    },
+    closeGroceryHelperAct : () => {
+      dispatch(closeGroceryHelperAct());
     }
   }
 }
