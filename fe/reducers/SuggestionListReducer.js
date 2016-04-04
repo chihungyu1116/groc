@@ -2,6 +2,10 @@ import {
   COMPLETED_PROCESSING_SHOPPING_LIST_ACT
 } from '../actions/ShoppingListAction';
 
+import {
+  COMPLETED_PROCESSING_ONBOARDING_ACT
+} from '../actions/OnboardingAction';
+
 const defaultState = {
 	suggestionList: [
 	{"query":"apple","count":1,"data":{"id":"1022608","sku":"1022608","name":"Gala Apples, 1 lb","maxAllowed":10,"taxCode":"2038305","isOutOfStock":false,"images":{"thumbnail":"http://i-grocery.walmart.com/mediaimages/1256145750872.jpg","large":"http://i-grocery.walmart.com/mediaimages/1256145750873.jpg"},"isAlcoholic":false,"productCode":"343"},"price":{"list":0.97,"priceUnitOfMeasure":"LB","salesUnitOfMeasure":"LB","salesQuantity":1,"isRollback":false,"isClearance":false,"unit":0.97}},
@@ -17,7 +21,11 @@ export default function SuggestionListReducer(state = defaultState, action) {
   if( action.type === COMPLETED_PROCESSING_SHOPPING_LIST_ACT) {
     return Object.assign({}, state, {
       suggestionList: action.shoppingList
-    })
+    });
+  } else if(action.type === COMPLETED_PROCESSING_ONBOARDING_ACT) {
+    return Object.assign({}, state, {
+      suggestionList: action.shoppingList
+    });
   } else if ( action.type === 'RECEIVED_ALTERNATIVE_ITEMS_ACT' ) {
   	const { alternativeItems } = action
 		return Object.assign({}, state, {

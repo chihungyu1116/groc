@@ -1,14 +1,14 @@
-import React, { Component , PropTypes } from 'react'
-import { connect } from 'react-redux'
-import RadioGroup from 'react-radio-group'
-import PreferredCategoryComponent from "../components/PreferredCategoryComponent.jsx"
+import React, { Component , PropTypes } from 'react';
+import { connect } from 'react-redux';
+import RadioGroup from 'react-radio-group';
+import PreferredCategoryComponent from "../components/PreferredCategoryComponent.jsx";
 import {
-  openGroceryHelperAct,
-  closeGroceryHelperAct
-} from '../actions/AppAction';
+  processOnboardingDataAct  
+} from '../actions/OnboardingAction';
 import ReactSliderNativeBootstrap from 'react-bootstrap-native-slider';
-import _ from 'lodash'
-const FIX_WIDTH = 700
+import _ from 'lodash';
+const FIX_WIDTH = 700;
+
 class OnboardingContainer extends React.Component {
   componentWillMount() {
     this.setInitialState()
@@ -52,14 +52,15 @@ class OnboardingContainer extends React.Component {
     window.location.hash = '';
   }
   submit(e){
-    let data = {}
-    data.num_household = this.state.householdSize
-    data.single = this.state.is_shop_for_self
-    data.gender = this.state.gender
-    data.has_kids = this.state.is_shop_for_kid == "yes" ? true : false
-    data.event = this.state.event
-    data.categories = this.state.categories.join(',')
-    console.log(data)
+    let data = {};
+    data.num_household = this.state.householdSize;
+    data.single = this.state.is_shop_for_self;
+    data.gender = this.state.gender;
+    data.has_kids = this.state.is_shop_for_kid == "yes";
+    data.event = this.state.event;
+    data.categories = this.state.categories.join(',');
+    console.log('submit what? ',this,data);
+    this.props.processOnboardingDataAct(data);
   }
   select(event){
     let data = {}
@@ -249,11 +250,8 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    openGroceryHelperAct : () => {
-      dispatch(openGroceryHelperAct());
-    },
-    closeGroceryHelperAct : () => {
-      dispatch(closeGroceryHelperAct());
+    processOnboardingDataAct : (data) => {
+      dispatch(processOnboardingDataAct(data));
     }
   }
 }

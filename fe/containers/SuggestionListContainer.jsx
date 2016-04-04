@@ -210,6 +210,8 @@ class SuggestionListContainer extends React.Component {
   }
 
   getSuggestionList() {
+
+    console.log('get suggestion list? ',this)
     const list = this.state.dirty ? this.state.suggestionList : this.props.suggestionList
     return list.filter((item) => { return !item.not_found })
   }
@@ -264,6 +266,9 @@ SuggestionListContainer.propTypes = {
 
 function mapStateToProps(state) {
   const { suggestionList, alternativeItems } = state.SuggestionListReducer
+
+  console.log('in suggestion list: ', state, suggestionList);
+
   return {
     suggestionList, alternativeItems
   }
