@@ -11,7 +11,7 @@ class DataController < ApplicationController
     "Snacks" => "14",
     "Beverage" => "15",
     "Baby & Toys" => "24", #baby  3000016632 diaper 3000651161 baby cereal 3000194950 building bag
-    "Electronics" => "25", #electronics 3000407698 earpods 3000176612 photo paper 3001277674 movie
+    "Electronics" => "25", #electronics 3000407698 earpods 3000176612 photo paper 1027675 headphone
     "Kitchen & Tools" => "26", #kitchen tools 3000225563 bleach 3000698083 mop express 3000090336 trash bag
     "Seafood" => "27", #Seafood 3000408330  Salmon  3000408387  Crab  3000289983  Crab
     "Sports" => "28"  #Sports 3000126994 baseball 3000163876 basketball 3000262540 football
@@ -194,8 +194,8 @@ class DataController < ApplicationController
                      id: 3000176612,
                      query: 'photo paper'
                    }, {
-                     id: 3001277674,
-                     query: 'movie'
+                     id: 1027675,
+                     query: 'headphone'
       }],
       "family" => [{
                      id: 3000407698,
@@ -204,8 +204,8 @@ class DataController < ApplicationController
                      id: 3000176612,
                      query: 'photo paper'
                    }, {
-                     id: 3001277674,
-                     query: 'movie'
+                     id: 1027675,
+                     query: 'headphone'
       }]
     },
     "26" => {
@@ -454,11 +454,12 @@ class DataController < ApplicationController
     end
     results = []
     found = false
-    
+
     items = items.uniq {|item| item[:id]}
+
     items.sample(12).each do |item|
       item_response = JSON.parse(find_item_by_id(item[:id]).body)
-
+      next if item_response["statusCode"] == 404
       if item_response.nil?
         result = { not_found: true }
       else
