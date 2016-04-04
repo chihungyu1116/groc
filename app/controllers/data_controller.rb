@@ -471,6 +471,7 @@ class DataController < ApplicationController
   private
 
   def find_item_by_query query, count = 1
+    # uri = URI.parse "https://grocery-api.walmart.com/v0.1/api/stores/9080/search?query=#{query}&rows=1&start=0"
     uri = URI.parse "https://grocery-api.qa.grocery-api.qa.walmart.com/search?store=9080&query=#{query}&start=0&count=#{count}"
     res = Net::HTTP.get_response uri
 
@@ -478,10 +479,13 @@ class DataController < ApplicationController
   end
 
   def find_item_by_id product_id
-    uri = URI.parse "https://grocery-api.qa.grocery-api.qa.walmart.com/product/#{product_id}?store=5884"
+    uri = URI.parse "https://grocery-api.qa.grocery-api.qa.walmart.com/product/#{product_id}?store=9080"
 
     puts uri
     Net::HTTP.get_response uri
   end
 
 end
+
+
+# https://grocery-api.walmart.com/v0.1/api/stores/5884/search?query=apple&rows=60&start=0
